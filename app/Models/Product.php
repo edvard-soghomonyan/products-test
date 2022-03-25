@@ -26,6 +26,12 @@ class Product extends Model
     use HasFactory,
         SoftDeletes;
 
+    protected $fillable = [
+        'author_id',
+        'name',
+        'published_at'
+    ];
+
     protected $casts = [
         'published_at' => 'date:Y-m-d'
     ];

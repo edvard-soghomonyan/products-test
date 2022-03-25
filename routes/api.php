@@ -18,6 +18,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/products', function () {
-    return \App\Models\Product::with('author')->paginate(15);
+Route::post('/products', function (Request $request) {
+    return \App\Models\Product::query()
+        ->when($request->filled('productName'), function ($query) use ($request){
+            $query->where('name', 'LIKE', "%". $request->get('productName') ."%");
+        })
+        ->when($request->filled('publishDate'), function ($query) use ($request){
+            $query->where('publish_date', 'LIKE', "%". $request->get('publishDate') ."%");
+        })
+        ->whereHas('author',function ($query) use ($request) {
+            $query->when($request->filled('authorName'), function ($q) use ($request) {
+                $q->where('name', 'LIKE', "%" . $request->get('authorName') . "%");
+            });
+        })
+        ->with('author')->paginate(15);
 });

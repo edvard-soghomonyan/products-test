@@ -1,13 +1,7 @@
 <template>
-    <Head title="Dashboard" />
+    <Head title="Products" />
 
     <BreezeAuthenticatedLayout>
-        <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Products
-            </h2>
-        </template>
-
         <div class="py-12">
             <div class="container mx-auto sm:px-6 lg:px-8">
                 <div
@@ -19,6 +13,24 @@
                         sm:rounded-lg
                     "
                 >
+                    <input type="text" placeholder="Author Name" v-model="authorName" class="mr-2 mt-2" />
+                    <input type="text" placeholder="Product Name" v-model="productName" class="mr-2" />
+                    <input type="text" placeholder="Publish Date" v-model="publishDate" />
+                    <button
+                        @click="fetchProducts()"
+                        class="
+                                px-4
+                                py-3
+                                mb-1
+                                mr-1
+                                text-sm
+                                leading-4
+                                border
+                                rounded
+                                bg-gray-300
+                                hover:bg-white
+                                focus:border-indigo-500 focus:text-indigo-500
+                            ">Filter</button>
                     <div class="p-6 bg-white border-b border-gray-200">
                         <table>
                             <thead class="font-bold bg-gray-300 border-b-2">
@@ -94,6 +106,9 @@ export default {
     },
     data() {
         return {
+            authorName: null,
+            productName: null,
+            publishDate: null,
             page: 1,
             products: {
                 data: [],
@@ -116,7 +131,11 @@ export default {
             } else {
                 this.page = page
             }
-            axios.get(`/api/products?page=${this.page}`)
+            axios.post(`/api/products?page=${this.page}`, {
+                authorName: this.authorName,
+                productName: this.productName,
+                publishDate: this.publishDate
+            })
                 .then(response => {
                     this.products.data = response.data.data
                     this.products.links = response.data.links

@@ -14,7 +14,7 @@ use Illuminate\Support\Carbonl;
  *
  * @property string $name
  *
- * @property Carbon $published_at
+ * @property Carbon $publish_date
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon $deleted_at
@@ -29,11 +29,11 @@ class Product extends Model
     protected $fillable = [
         'author_id',
         'name',
-        'published_at'
+        'publish_date'
     ];
 
     protected $casts = [
-        'published_at' => 'date:Y-m-d'
+        'publish_date' => 'date:Y-m-d'
     ];
 
     public function author(): BelongsTo
